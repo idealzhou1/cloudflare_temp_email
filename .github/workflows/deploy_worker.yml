@@ -1,0 +1,59 @@
+# Deploy Worker to Cloudflare
+# 自动部署 Worker 到 Cloudflare Workers
+
+name: Deploy Worker
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "worker/**"
+      - ".github/workflows/deploy_worker.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 🟢 Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 10
+          run_install: false
+
+      - name: 📦 Install Dependencies
+        working-directory: worker
+        run: |
+          pnpm install --no-frozen-lockfile
+
+      - name: 🚀 Deploy to Cloudflare Workers
+        working-directory: worker
+        run: |
+          pnpm run deploy
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      - name: 📤 Upload Build Artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: worker-dist
+          path: worker/dist/
+          retention-days: 7
