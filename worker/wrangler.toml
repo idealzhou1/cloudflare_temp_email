@@ -39,9 +39,9 @@ PREFIX = "tmp"
 # Disable custom email address name, if set true, users cannot input custom email name, will auto generate
 # DISABLE_CUSTOM_ADDRESS_NAME = true
 # IF YOU WANT TO MAKE YOUR SITE PRIVATE, UNCOMMENT THE FOLLOWING LINES
-PASSWORDS = ["Cloudflare2026!"]
+# PASSWORDS = ["Cloudflare2026!"]
 # For admin panel
-ADMIN_PASSWORDS = ["Cloudflare2026!"]
+# ADMIN_PASSWORDS = ["Cloudflare2026!"]
 # warning: no password or user check for admin portal
 # DISABLE_ADMIN_PASSWORD_CHECK = false
 # ADMIN CONTACT, CAN BE ANY STRING
